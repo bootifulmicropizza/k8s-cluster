@@ -1,0 +1,82 @@
+apiVersion: kops/v1alpha2
+kind: Cluster
+metadata:
+  creationTimestamp: 2017-11-26T15:56:54Z
+  name: k8s.bootifulmicropizza.com
+spec:
+  api:
+    dns: {}
+  authorization:
+    alwaysAllow: {}
+  channel: stable
+  cloudProvider: aws
+  configBase: s3://k8s.bootifulmicropizza.com/k8s.bootifulmicropizza.com
+  etcdClusters:
+  - etcdMembers:
+    - instanceGroup: master-eu-west-2a
+      name: a
+    name: main
+  - etcdMembers:
+    - instanceGroup: master-eu-west-2a
+      name: a
+    name: events
+  kubernetesApiAccess:
+  - 0.0.0.0/0
+  kubernetesVersion: 1.7.10
+  masterPublicName: api.k8s.bootifulmicropizza.com
+  networkCIDR: 172.20.0.0/16
+  networking:
+    kubenet: {}
+  nonMasqueradeCIDR: 100.64.0.0/10
+  sshAccess:
+  - 0.0.0.0/0
+  subnets:
+  - cidr: 172.20.32.0/19
+    name: eu-west-2a
+    type: Public
+    zone: eu-west-2a
+  - cidr: 172.20.64.0/19
+    name: eu-west-2b
+    type: Public
+    zone: eu-west-2b
+  topology:
+    dns:
+      type: Public
+    masters: public
+    nodes: public
+---
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: 2017-11-26T15:56:54Z
+  labels:
+    kops.k8s.io/cluster: k8s.bootifulmicropizza.com
+  name: master-eu-west-2a
+spec:
+  image: kope.io/k8s-1.7-debian-jessie-amd64-hvm-ebs-2017-07-28
+  machineType: m4.large
+  maxPrice: "0.04"
+  maxSize: 1
+  minSize: 1
+  role: Master
+  subnets:
+  - eu-west-2a
+---
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: 2017-11-26T15:56:54Z
+  labels:
+    kops.k8s.io/cluster: k8s.bootifulmicropizza.com
+  name: nodes
+spec:
+  image: kope.io/k8s-1.7-debian-jessie-amd64-hvm-ebs-2017-07-28
+  machineType: m4.large
+  maxPrice: "0.04"
+  maxSize: 3
+  minSize: 3
+  role: Node
+  subnets:
+  - eu-west-2a
+  - eu-west-2b
+
