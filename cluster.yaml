@@ -1,7 +1,7 @@
 apiVersion: kops/v1alpha2
 kind: Cluster
 metadata:
-  creationTimestamp: 2017-11-26T15:56:54Z
+  creationTimestamp: 2017-12-30T11:51:43Z
   name: k8s.bootifulmicropizza.com
 spec:
   api:
@@ -20,9 +20,12 @@ spec:
     - instanceGroup: master-eu-west-2a
       name: a
     name: events
+  iam:
+    allowContainerRegistry: true
+    legacy: false
   kubernetesApiAccess:
   - 0.0.0.0/0
-  kubernetesVersion: 1.7.10
+  kubernetesVersion: 1.8.4
   masterPublicName: api.k8s.bootifulmicropizza.com
   networkCIDR: 172.20.0.0/16
   networking:
@@ -48,35 +51,40 @@ spec:
 apiVersion: kops/v1alpha2
 kind: InstanceGroup
 metadata:
-  creationTimestamp: 2017-11-26T15:56:54Z
+  creationTimestamp: 2017-12-30T11:51:43Z
   labels:
     kops.k8s.io/cluster: k8s.bootifulmicropizza.com
   name: master-eu-west-2a
 spec:
-  image: kope.io/k8s-1.7-debian-jessie-amd64-hvm-ebs-2017-07-28
+  image: kope.io/k8s-1.8-debian-jessie-amd64-hvm-ebs-2017-12-02
   machineType: m4.large
   maxPrice: "0.04"
   maxSize: 1
   minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: master-eu-west-2a
   role: Master
+  rootVolumeSize: 64
   subnets:
   - eu-west-2a
 ---
 apiVersion: kops/v1alpha2
 kind: InstanceGroup
 metadata:
-  creationTimestamp: 2017-11-26T15:56:54Z
+  creationTimestamp: 2017-12-30T11:51:43Z
   labels:
     kops.k8s.io/cluster: k8s.bootifulmicropizza.com
   name: nodes
 spec:
-  image: kope.io/k8s-1.7-debian-jessie-amd64-hvm-ebs-2017-07-28
+  image: kope.io/k8s-1.8-debian-jessie-amd64-hvm-ebs-2017-12-02
   machineType: m4.large
   maxPrice: "0.04"
   maxSize: 3
   minSize: 3
+  nodeLabels:
+    kops.k8s.io/instancegroup: nodes
   role: Node
+  rootVolumeSize: 64
   subnets:
   - eu-west-2a
   - eu-west-2b
-
